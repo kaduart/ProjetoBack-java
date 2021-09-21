@@ -10,6 +10,7 @@ import br.com.teste.springwithjwt.service.UserService;
 
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
+import org.springframework.security.access.prepost.PreAuthorize;
 import org.springframework.security.crypto.password.PasswordEncoder;
 import org.springframework.web.bind.annotation.*;
 import org.springframework.web.server.ResponseStatusException;
@@ -37,6 +38,7 @@ public class UserController extends Exception {
     }
 
 
+    @PreAuthorize("hasRole('ADMIN')")
     @PostMapping(value = "/users")
     public ResponseEntity<User> createUser(@RequestBody User user) {
 
@@ -46,8 +48,8 @@ public class UserController extends Exception {
         return new ResponseEntity<>(userSave, HttpStatus.OK);
     }
 
+    @PreAuthorize("hasRole('ADMIN')")
     @PutMapping("/users/{id}")
-    @ResponseStatus(HttpStatus.OK)
     public void updateUser(@PathVariable("id") Long id, @RequestBody User user) {
         userService.findById(id)
                 .map(userBase -> {
@@ -57,12 +59,14 @@ public class UserController extends Exception {
                 .orElseThrow(() -> new ResponseStatusException(HttpStatus.NOT_FOUND, "Inconsistência na atualização."));
     }
 
+    @PreAuthorize("hasAnyRole('ADMIN', 'USER')")
     @GetMapping(value = "/users/list")
     public ResponseEntity<List<User>> getAll() {
         List<User> getUsers = userService.getAllUsers();
         return new ResponseEntity<>(getUsers, HttpStatus.OK);
     }
 
+    @PreAuthorize("hasRole('ADMIN')")
     @GetMapping(value = "/users/getUserId/{id}")
     @ResponseStatus(HttpStatus.OK)
     public User getUserId(@PathVariable Long id) {
@@ -70,6 +74,7 @@ public class UserController extends Exception {
                 .orElseThrow(() -> new ResponseStatusException(HttpStatus.NOT_FOUND, "Usuário não encontrado."));
     }
 
+    @PreAuthorize("hasRole('ADMIN')")
     @DeleteMapping(value = "/users/{id}")
     @ResponseStatus(HttpStatus.NO_CONTENT)
     public void deleteUser(@PathVariable Long id) {
