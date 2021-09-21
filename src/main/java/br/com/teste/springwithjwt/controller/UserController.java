@@ -38,8 +38,8 @@ public class UserController extends Exception {
     }
 
 
-    @PreAuthorize("hasRole('ADMIN')")
     @PostMapping(value = "/users")
+    @PreAuthorize("hasRole('ADMIN')")
     public ResponseEntity<User> createUser(@RequestBody User user) {
 
         user.setPassword(encoder.encode(user.getPassword()));
@@ -48,8 +48,9 @@ public class UserController extends Exception {
         return new ResponseEntity<>(userSave, HttpStatus.OK);
     }
 
-    @PreAuthorize("hasRole('ADMIN')")
     @PutMapping("/users/{id}")
+    @ResponseStatus(HttpStatus.OK)
+    @PreAuthorize("hasRole('ADMIN')")
     public void updateUser(@PathVariable("id") Long id, @RequestBody User user) {
         userService.findById(id)
                 .map(userBase -> {
@@ -59,8 +60,8 @@ public class UserController extends Exception {
                 .orElseThrow(() -> new ResponseStatusException(HttpStatus.NOT_FOUND, "Inconsistência na atualização."));
     }
 
-    @PreAuthorize("hasAnyRole('ADMIN', 'USER')")
     @GetMapping(value = "/users/list")
+    @PreAuthorize("hasAnyRole('ADMIN', 'USER')")
     public ResponseEntity<List<User>> getAll() {
         List<User> getUsers = userService.getAllUsers();
         return new ResponseEntity<>(getUsers, HttpStatus.OK);
@@ -74,9 +75,10 @@ public class UserController extends Exception {
                 .orElseThrow(() -> new ResponseStatusException(HttpStatus.NOT_FOUND, "Usuário não encontrado."));
     }
 
-    @PreAuthorize("hasRole('ADMIN')")
+
     @DeleteMapping(value = "/users/{id}")
     @ResponseStatus(HttpStatus.NO_CONTENT)
+    @PreAuthorize("hasRole('ADMIN')")
     public void deleteUser(@PathVariable Long id) {
         userService.findById(id)
                         .map(user -> {
