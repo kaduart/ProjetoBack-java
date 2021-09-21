@@ -1,0 +1,63 @@
+
+
+
+server:
+  port: 2030
+
+spring:
+  datasource:
+
+    #datasource h2
+    driver-class-name: org.h2.Driver
+    url: jdbc:h2:~/db-local;DB_CLOSE_ON_EXIT=FALSE;AUTO_SERVER=TRUE
+    username:
+    password:
+
+
+  #jpa H2
+  jpa:
+    database-platform:
+    org.hibernate.dialect.H2Dialect:
+      defer-datasource-initialization: true
+
+    hibernate:
+      ddl-auto: update
+    show-sql: true
+  h2:
+    console:
+      path: /h2
+      enabled: true
+
+
+#
+#  security:
+#    oauth2:
+#      resourceserver:
+#        jwt:
+#          issuer-uri: https://dev-wasu21oh.us.auth0.com/api/v2/
+#
+#
+#auth0:
+#  audience: https://dev-wasu21oh.us.auth0.com/api/v2/
+#  domain: dev-wasu21oh.us.auth0.com
+
+
+#datasource postgres
+#    url: jdbc:postgres://localhost:5432/postgres
+#    username: postgres
+#    password: admin
+
+#    #jpa postgres
+#    jpa:
+#      defer-datasource-initialization: true
+#      show-sql: true
+#      hibernate:
+#        ddl-auto: update
+#    properties:
+#      hibernate:
+#        show_sql: true
+#        format_sql: true
+
+
+
+
